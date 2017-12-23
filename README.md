@@ -41,6 +41,10 @@ When you are done, run the script again to restore the original file names:
 
 That's it.
 
+### Limitations ###
+
+This version of the script only considers the file extension as the part behind the last dot. Thus, it cannot be used to rename .tar.gz files to .tgz.
+
 ## Test it before using it ##
 
 You can try it in the test/ directory, which contains a number of js and jsx files in sub directories (the default settings are fine for this, so we do not change anything in this case):
@@ -69,6 +73,7 @@ And inspect the directory structure again.
     tree
 
 
+    
 ## License ##
 
 This is released under the WTFPL, see http://www.wtfpl.net/ or the LICENSE file for details.
