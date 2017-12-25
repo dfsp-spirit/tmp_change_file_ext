@@ -18,47 +18,65 @@ This is a hack to allow you to run tools which require a certain file extension 
 
 ## Installation ##
 
-Copy the bash script to the directory in which you want to use it.
+Download or clone the script from github, make sure it is executable.
+
+    git clone https://github.com/dfsp-spirit/tmp_change_file_ext.git
+    cd tmp_change_file_ext
+    chmod +x ./tmp_change_file_ext.sh
 
 
 ## Usage ##
 
 Make a backup of the directory you want to change (or make a new, clean branch to work in if using version control like git).
 
-Configure the old and new file extensions you want in the script header.
+Then run the script like this to get help:
 
-Then run the script once like this to rename the files:
+    ./tmp_change_file_ext.sh -h
+    [TMPEXTCH] USAGE: ./tmp_change_file_ext.sh -c <options> [-f]
+    [TMPEXTCH] USAGE: ./tmp_change_file_ext.sh -r <options>
+    [TMPEXTCH] USAGE: ./tmp_change_file_ext.sh -h
+    [TMPEXTCH] valid options are:
+    [TMPEXTCH]   -c         : change mode (rename files according to settings and create mapping file)
+    [TMPEXTCH]   -r         : restore mode (restore previsously renamed files to their original file extensions)
+    [TMPEXTCH]   -s <ext>   : set source or original file extension to <ext>. Defaults to 'jsx' if omitted.
+    [TMPEXTCH]   -t <ext>   : set temporary file extension to <ext>. Defaults to 'js' if omitted.
+    [TMPEXTCH]   -d <dir>   : set directory to work on to <dir>. Defaults to '.' if omitted.
+    [TMPEXTCH]   -f         : force action, even if this means overwriting an existing file extension mapping file (only applies to change mode).
+    [TMPEXTCH]   -m <file>  : set mapping file location to <file>. Defaults to '~/.renamed_files.lst' if omitted.
+    [TMPEXTCH]   -h         : show this help and exit
+    [TMPEXTCH] EXAMPLES:
+    [TMPEXTCH] * Rename all jsx files to js in ~/my_project/:
+    [TMPEXTCH]    ./tmp_change_file_ext.sh -c -d ~/my_project/
+    [TMPEXTCH]   Restore the file names from the last action:
+    [TMPEXTCH]    ./tmp_change_file_ext.sh -r -d ~/develop/my_project/
+    [TMPEXTCH] * Rename all txt files to lst in /tmp/doc/:
+    [TMPEXTCH]    ./tmp_change_file_ext.sh -c -s txt -t lst -d /tmp/doc/
+    [TMPEXTCH]   Restore the file names from the last action:
+    [TMPEXTCH]    ./tmp_change_file_ext.sh -r -s txt -t lst -d /tmp/doc/
 
-    ./tmp_change_file_ext.sh --rename
-    
-This will create a list with the original file names and rename the files as specified in the script.
+This will print the usage info, which currently looks like this:
 
-Now do whatever you need to do with the renamed files (e.g., run a tool on them which requires a certain file extension).
 
-When you are done, run the script again to restore the original file names:
-
-    ./tmp_change_file_ext.sh --renamed
-
-That's it.
 
 ### Limitations ###
 
 This version of the script only considers the file extension as the part behind the last dot. Thus, it cannot be used to rename .tar.gz files to .tgz.
 
-## Test it before using it ##
+## Usage example / Test it before using it ##
 
-You can try it in the test/ directory, which contains a number of js and jsx files in sub directories (the default settings are fine for this, so we do not change anything in this case):
+You can try it in the test/ directory, which contains a number of js and jsx files in sub directories. 
 
-    cp tmp_change_file_ext.sh test/
-    cd test/
-    
-Let's inspect the directory structure and files we have in here, e.g., by running the `tree` command if you have it installed:
+Let's first inspect the directory structure and files we have in here, e.g., by running the `tree` command if you have it installed:
 
+    cd <repo>/test/
     tree
     
 Now let's rename the files:
     
-    ./tmp_change_file_ext.sh --rename
+    ../tmp_change_file_ext.sh -c
+
+Note that renaming from jsx to js is the default, so we do not need the -s and -t options in this special case. (It would not hurt to add them of course, and
+express that command as `../tmp_change_file_ext.sh -c -s jsx -t js -d .` instead.)
     
 Now inspect the directory structure again.
 
@@ -66,7 +84,7 @@ Now inspect the directory structure again.
     
 You could make changes or run a tool now. But we will simply restore the original file extensions now:
 
-    ./tmp_change_file_ext.sh --restore
+    ../tmp_change_file_ext.sh -r
 
 And inspect the directory structure again.
 
