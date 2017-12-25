@@ -94,7 +94,7 @@ if [ "$MODE" = "MODE_RENAME" ]; then
         mv "$ORIG_FILE" "$NEW_FILE"
     done
     
-    echo "$APPTAG Files renamed (see list in ${MODIFIED_FILES_LIST} if you care.)"
+    echo "$APPTAG Files renamed to temporary extension '${TEMP_EXTENSION}', see list in ${MODIFIED_FILES_LIST} for details."
 elif [ "$MODE" = "MODE_RESTORE" ]; then
     if [ ! -f "$MODIFIED_FILES_LIST" ]; then
         echo "$APPTAG ERROR: File list does not exist at '$MODIFIED_FILES_LIST'."
@@ -107,6 +107,10 @@ elif [ "$MODE" = "MODE_RESTORE" ]; then
         echo "$APPTAG Restoring file '$NEW_FILE' to its original name '$RESTORED_FILE'."
         mv "$NEW_FILE" "$RESTORED_FILE"
     done
+
+    NUM_FILES=$(wc -l $MODIFIED_FILES_LIST | awk '{print $1}')
+    echo "$APPTAG Restored $NUM_FILES files to their original file extension '${ORIGINAL_EXTENSION}'."
+    rm "$MODIFIED_FILES_LIST"
 else
     show_help
     exit 1
